@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laporan Kegiatan Sore</title>
+  <title>Laporan Kegiatan Harian</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -29,7 +29,14 @@
     h2 {
       text-align: center;
       color: #007166;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+
+    .time-info {
+      text-align: center;
+      font-size: 14px;
+      color: #00695c;
+      margin-bottom: 15px;
     }
 
     label {
@@ -85,7 +92,8 @@
 </head>
 <body>
   <div class="container">
-    <h2>Laporan Kegiatan Sore</h2>
+    <h2>Laporan Kegiatan</h2>
+    <div class="time-info" id="waktuSekarang"></div>
 
     <label for="nama">Nama Siswa:</label>
     <select id="nama">
@@ -107,6 +115,36 @@
   </div>
 
   <script>
+    // Fungsi menampilkan waktu, hari, dan tanggal real-time
+    function updateWaktu() {
+      const waktuEl = document.getElementById('waktuSekarang');
+      const now = new Date();
+      const hariArray = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const bulanArray = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      const hari = hariArray[now.getDay()];
+      const tanggal = now.getDate();
+      const bulan = bulanArray[now.getMonth()];
+      const tahun = now.getFullYear();
+
+      const jam = now.getHours();
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      const waktuTeks = jam + ":" + menit;
+
+      let waktuBagian = "pagi";
+      if (jam >= 11 && jam < 15) waktuBagian = "siang";
+      else if (jam >= 15 && jam < 18) waktuBagian = "sore";
+      else if (jam >= 18 || jam < 4) waktuBagian = "malam";
+
+      waktuEl.innerHTML = `${hari}, ${tanggal} ${bulan} ${tahun} - ${waktuTeks} (${waktuBagian})`;
+    }
+
+    setInterval(updateWaktu, 1000);
+    updateWaktu();
+
     function tambahKegiatan() {
       const list = document.getElementById('kegiatan-list');
       const div = document.createElement('div');
@@ -120,6 +158,22 @@
       const inputs = document.querySelectorAll('#kegiatan-list input');
       const now = new Date();
       const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      const hariArray = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const bulanArray = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      const hari = hariArray[now.getDay()];
+      const tanggal = now.getDate();
+      const bulan = bulanArray[now.getMonth()];
+      const tahun = now.getFullYear();
+
+      let waktuBagian = "pagi";
+      const jamInt = now.getHours();
+      if (jamInt >= 11 && jamInt < 15) waktuBagian = "siang";
+      else if (jamInt >= 15 && jamInt < 18) waktuBagian = "sore";
+      else if (jamInt >= 18 || jamInt < 4) waktuBagian = "malam";
 
       if (!nama) {
         alert('Silakan pilih nama siswa terlebih dahulu.');
@@ -138,9 +192,8 @@
         return;
       }
 
-      const pesan = `Assalamu'alaikum warahmatullahi wabarakatuh ijin melaporkan bapak ibu 🙏🏼 kegiatan sore pukul ${jam} hari ini.%0A%0ANama Siswa : ${nama}%0A%0AKegiatan :%0A${daftarKegiatan}%0ASekian laporan dari kami kurang lebihnya mohon maaf.%0AWassalamu'alaikum warahmatullahi wabarakatuh 🙏🏼`;
+      const pesan = `Assalamu'alaikum warahmatullahi wabarakatuh ijin melaporkan bapak ibu 🙏🏼 kegiatan ${waktuBagian} hari ${hari}, ${tanggal} ${bulan} ${tahun} pukul ${jam}.%0A%0ANama Siswa : ${nama}%0A%0AKegiatan :%0A${daftarKegiatan}%0ASekian laporan dari kami kurang lebihnya mohon maaf.%0AWassalamu'alaikum warahmatullahi wabarakatuh 🙏🏼`;
 
-      // Tanpa nomor tujuan → buka WhatsApp dengan pesan siap kirim
       const url = `https://wa.me/?text=${pesan}`;
       window.open(url, '_blank');
     }

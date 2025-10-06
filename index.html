@@ -15,6 +15,42 @@
       min-height: 100vh;
       margin: 0;
       padding: 20px;
+      flex-direction: column;
+    }
+
+    .marquee {
+      width: 100%;
+      background-color: #007166;
+      color: white;
+      padding: 8px 0;
+      font-weight: bold;
+      font-size: 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: 0 3px 6px rgba(0, 113, 102, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: berjalan 10s linear infinite;
+    }
+
+    @keyframes berjalan {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      width: 100px;
+      height: auto;
+      border-radius: 10px;
     }
 
     .container {
@@ -91,6 +127,16 @@
   </style>
 </head>
 <body>
+  <!-- 🔹 Teks Berjalan -->
+  <div class="marquee"><span>💪 Saya Kuat Saya Canggih 💪</span></div>
+
+  <!-- 🔹 Penampil Gambar PNG -->
+  <div class="logo">
+    <img id="preview" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Logo atau Gambar PNG">
+    <input type="file" accept="image/png" onchange="tampilGambar(event)">
+  </div>
+
+  <!-- 🔹 Form Utama -->
   <div class="container">
     <h2>Laporan Kegiatan</h2>
     <div class="time-info" id="waktuSekarang"></div>
@@ -115,7 +161,13 @@
   </div>
 
   <script>
-    // Fungsi menampilkan waktu, hari, dan tanggal real-time
+    // 🔹 Tampilkan gambar PNG yang diunggah
+    function tampilGambar(event) {
+      const img = document.getElementById('preview');
+      img.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    // 🔹 Tampilkan hari, tanggal, jam realtime
     function updateWaktu() {
       const waktuEl = document.getElementById('waktuSekarang');
       const now = new Date();
@@ -145,6 +197,7 @@
     setInterval(updateWaktu, 1000);
     updateWaktu();
 
+    // 🔹 Tambah kegiatan dinamis
     function tambahKegiatan() {
       const list = document.getElementById('kegiatan-list');
       const div = document.createElement('div');
@@ -153,6 +206,7 @@
       list.appendChild(div);
     }
 
+    // 🔹 Kirim pesan ke WhatsApp
     function kirimWhatsApp() {
       const nama = document.getElementById('nama').value;
       const inputs = document.querySelectorAll('#kegiatan-list input');

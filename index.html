@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Kegiatan Sore</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #e0f7f5;
+      color: #004d40;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 113, 102, 0.3);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007166;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+      margin-top: 10px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .kegiatan {
+      display: flex;
+      gap: 5px;
+    }
+
+    .kegiatan input {
+      flex: 1;
+    }
+
+    button {
+      background-color: #007166;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 3px 6px rgba(0, 113, 102, 0.3);
+    }
+
+    button:hover {
+      background-color: #009f8b;
+    }
+
+    #addBtn {
+      background-color: #00bfa5;
+    }
+
+    #addBtn:hover {
+      background-color: #00e6b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Laporan Kegiatan Sore</h2>
+
+    <label for="nama">Nama Siswa:</label>
+    <select id="nama">
+      <option value="">-- Pilih Nama --</option>
+      <option value="Moh Saiful Jamil">1. Moh Saiful Jamil</option>
+      <option value="Muhammad Basri">2. Muhammad Basri</option>
+      <option value="Muhammad Akbar">3. Muhammad Akbar</option>
+    </select>
+
+    <div id="kegiatan-list">
+      <label>Kegiatan:</label>
+      <div class="kegiatan">
+        <input type="text" placeholder="Masukkan kegiatan...">
+      </div>
+    </div>
+
+    <button id="addBtn" type="button" onclick="tambahKegiatan()">+ Tambah Kegiatan</button>
+    <button type="button" onclick="kirimWhatsApp()">Kirim ke WhatsApp</button>
+  </div>
+
+  <script>
+    function tambahKegiatan() {
+      const list = document.getElementById('kegiatan-list');
+      const div = document.createElement('div');
+      div.className = 'kegiatan';
+      div.innerHTML = `<input type="text" placeholder="Masukkan kegiatan...">`;
+      list.appendChild(div);
+    }
+
+    function kirimWhatsApp() {
+      const nama = document.getElementById('nama').value;
+      const inputs = document.querySelectorAll('#kegiatan-list input');
+      const now = new Date();
+      const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+      if (!nama) {
+        alert('Silakan pilih nama siswa terlebih dahulu.');
+        return;
+      }
+
+      let daftarKegiatan = "";
+      inputs.forEach((input, index) => {
+        if (input.value.trim() !== "") {
+          daftarKegiatan += `${index + 1}. ${input.value.trim()}%0A`;
+        }
+      });
+
+      if (daftarKegiatan === "") {
+        alert('Isi minimal satu kegiatan sebelum mengirim.');
+        return;
+      }
+
+      const pesan = `Assalamu'alaikum warahmatullahi wabarakatuh ijin melaporkan bapak ibu 🙏🏼 kegiatan sore pukul ${jam} hari ini.%0A%0ANama Siswa : ${nama}%0A%0AKegiatan :%0A${daftarKegiatan}%0ASekian laporan dari kami kurang lebihnya mohon maaf.%0AWassalamu'alaikum warahmatullahi wabarakatuh 🙏🏼`;
+
+      // Tanpa nomor tujuan → buka WhatsApp dengan pesan siap kirim
+      const url = `https://wa.me/?text=${pesan}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
